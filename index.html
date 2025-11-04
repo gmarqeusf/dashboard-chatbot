@@ -1,0 +1,96 @@
+<!doctype html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard de Performance — Chatbot</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" crossorigin href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#359EFF',
+            'background-light': '#f5f7f8',
+            'background-dark': '#0f1923',
+            'card-light': '#ffffff',
+            'card-dark': '#1a2230',
+            'text-light': '#0d121b',
+            'text-dark': '#f0f2f5',
+            'subtext-light': '#4c669a',
+            'subtext-dark': '#94a3b8',
+            'border-light': '#e2e8f0',
+            'border-dark': '#334155',
+            success: '#07883b',
+            danger: '#e73908'
+          },
+          fontFamily: { display: ['Lexend', 'ui-sans-serif', 'system-ui'] },
+          borderRadius: { DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem', full: '9999px' }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+  <div class="relative flex min-h-screen w-full">
+    <aside class="flex h-screen flex-col justify-between border-r border-border-light bg-card-light p-4 dark:border-border-dark dark:bg-card-dark sticky top-0 w-64">
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-3">
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5SHbTa1nltmxWO2PyBrMZDALUSD2SzaaFNKWUMk06Pc9N4bd-d3HqRUAtZCEbxMMxiOPyzBFL25b42W_UuKbUSD8GW8MXh1sADmZC8gWZ2Q4poIuGkpNS_MtopumGv9xqW0GivHB0MdnVKez5ywRMFtJT7nP2kTW1GexPyrXlBFLFehPhDEWwywatw0gc1KCKjKw3nAhebO_KAiWKej1pFRm5mGYw3gb14E5ZEXcNC6kkP7iguowuoJbS84Dtwchhsf9iOH36OZ1A" alt="Logo Escola de Desenho" class="rounded-full object-cover" width="44" height="44"> 
+          <div class="flex flex-col">
+            <h1 class="text-base font-medium">Escola de Desenho</h1>
+            <p class="text-sm text-subtext-light dark:text-subtext-dark">Chatbot Manager</p>
+          </div>
+        </div>
+        <nav class="flex flex-col gap-2" aria-label="Navegação principal">
+          <a class="flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-primary" href="#" aria-current="page">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="text-sm font-medium">Dashboard</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 hover:bg-primary/5 rounded-lg" href="#">
+            <span class="material-symbols-outlined text-subtext-light">bar_chart</span>
+            <span class="text-sm font-medium">Analytics</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 hover:bg-primary/5 rounded-lg" href="#">
+            <span class="material-symbols-outlined text-subtext-light">chat</span>
+            <span class="text-sm font-medium">Conversations</span>
+          </a>
+          <a class="flex items-center gap-3 px-3 py-2 hover:bg-primary/5 rounded-lg" href="#">
+            <span class="material-symbols-outlined text-subtext-light">settings</span>
+            <span class="text-sm font-medium">Settings</span>
+          </a>
+        </nav>
+      </div>
+    </aside>
+    <main class="w-full flex-1 p-6 lg:p-8">
+      <div class="mx-auto max-w-7xl">
+        <h1 class="text-3xl font-bold mb-6">Dashboard de Performance - Chatbot</h1>
+        <p class="text-base text-subtext-light mb-8">Mostrando dados dos últimos 30 dias</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="rounded-xl border border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-subtext-light">group_add</span>
+              <h2 class="text-base font-medium">Novos Leads</h2>
+            </div>
+            <p class="text-4xl font-bold">128</p>
+            <p class="text-success text-sm">+15% vs. mês anterior</p>
+          </div>
+          <div class="rounded-xl border border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-subtext-light">sentiment_satisfied</span>
+              <h2 class="text-base font-medium">Satisfação (CSAT)</h2>
+            </div>
+            <p class="text-4xl font-bold">92%</p>
+            <p class="text-success text-sm">+3% vs. mês anterior</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
