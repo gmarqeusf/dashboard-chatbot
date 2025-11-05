@@ -1,0 +1,127 @@
+<!doctype html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — Leads & Conversões</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="font-display bg-background-light text-gray-800">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 p-4 border-r border-gray-200 bg-white">
+      <img src="logo_estudio_limoli.jpg"
+           alt="Logo Estúdio Limoli"
+           class="rounded-full w-20 h-20 object-contain mb-3 shadow-md bg-white p-1 border border-gray-200" />
+      <h2 class="text-lg font-bold">Escola de Desenho</h2>
+      <p class="text-sm text-gray-600 mb-4">Painel de performance</p>
+      <nav class="flex flex-col gap-2 text-sm">
+        <a href="index.html" class="py-2 px-3 rounded hover:bg-gray-100">Visão Geral</a>
+        <a href="whatsapp_metricas.html" class="py-2 px-3 rounded hover:bg-gray-100">WhatsApp</a>
+        <a href="leads.html" class="py-2 px-3 rounded bg-blue-50">Leads & Conversões</a>
+        <a href="financeiro.html" class="py-2 px-3 rounded hover:bg-gray-100">Financeiro</a>
+        <a href="Google ADS.html" class="py-2 px-3 rounded hover:bg-gray-100">Google Ads</a>
+        <a href="campanhas.html" class="py-2 px-3 rounded hover:bg-gray-100">Campanhas</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-6">
+      <h1 class="text-2xl font-bold mb-6">Leads & Conversões</h1>
+
+      <!-- KPIs principais -->
+      <section class="grid grid-cols-3 gap-4 mb-6">
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Total de Leads (30d)</p>
+          <h3 class="text-2xl font-bold">2.103</h3>
+          <p class="text-sm text-green-600">+12% vs mês anterior</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Agendados</p>
+          <h3 class="text-2xl font-bold">420</h3>
+          <p class="text-sm text-green-600">Taxa de conversão: 19%</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Matriculados</p>
+          <h3 class="text-2xl font-bold">127</h3>
+          <p class="text-sm text-blue-600">Taxa final: 6%</p>
+        </div>
+      </section>
+
+      <!-- Gráficos -->
+      <section class="grid grid-cols-2 gap-4 mb-6">
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Funil de Conversão</h4>
+          <canvas id="chart-funnel" height="160"></canvas>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Leads por Bairro</h4>
+          <canvas id="chart-neigh" height="160"></canvas>
+        </div>
+      </section>
+
+      <!-- Origem dos Leads -->
+      <section class="p-4 bg-white rounded shadow mb-6">
+        <h4 class="font-semibold mb-2">Origem dos Leads</h4>
+        <canvas id="chart-source" height="140"></canvas>
+      </section>
+
+      <footer class="text-sm text-gray-500 mt-6">
+        Dados simulados — em breve integrados ao Google Sheets e formulários do site.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Funil
+    new Chart(document.getElementById('chart-funnel'), {
+      type: 'bar',
+      data: {
+        labels: ['Leads', 'Agendados', 'Matriculados'],
+        datasets: [{
+          label: 'Quantidade',
+          data: [2103, 420, 127],
+          backgroundColor: ['#93C5FD', '#60A5FA', '#2563EB']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    // Bairros
+    new Chart(document.getElementById('chart-neigh'), {
+      type: 'bar',
+      data: {
+        labels: ['Centro','Jardim','Vila Nova','Santa Bárbara','São José','Boa Vista'],
+        datasets: [{
+          label: 'Leads',
+          data: [650, 430, 270, 190, 150, 85],
+          backgroundColor: '#60A5FA'
+        }]
+      },
+      options: { indexAxis: 'y', responsive: true }
+    });
+
+    // Fontes de Lead
+    new Chart(document.getElementById('chart-source'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Google Ads', 'Instagram', 'Indicação', 'Site', 'Outros'],
+        datasets: [{
+          data: [45, 30, 15, 7, 3],
+          backgroundColor: ['#2563eb','#f59e0b','#10b981','#a855f7','#9ca3af']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!doctype html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — WhatsApp Métricas</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="font-display bg-background-light text-gray-800">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 p-4 border-r border-gray-200 bg-white">
+      <img src="logo_estudio_limoli.jpg"
+           alt="Logo Estúdio Limoli"
+           class="rounded-full w-20 h-20 object-contain mb-3 shadow-md bg-white p-1 border border-gray-200" />
+      <h2 class="text-lg font-bold">Escola de Desenho</h2>
+      <p class="text-sm text-gray-600 mb-4">Painel de performance</p>
+      <nav class="flex flex-col gap-2 text-sm">
+        <a href="index.html" class="py-2 px-3 rounded hover:bg-gray-100">Visão Geral</a>
+        <a href="whatsapp_metricas.html" class="py-2 px-3 rounded bg-blue-50">WhatsApp</a>
+        <a href="leads.html" class="py-2 px-3 rounded hover:bg-gray-100">Leads & Conversões</a>
+        <a href="financeiro.html" class="py-2 px-3 rounded hover:bg-gray-100">Financeiro</a>
+        <a href="Google ADS.html" class="py-2 px-3 rounded hover:bg-gray-100">Google Ads</a>
+        <a href="campanhas.html" class="py-2 px-3 rounded hover:bg-gray-100">Campanhas</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-6">
+      <h1 class="text-2xl font-bold mb-6">WhatsApp — Métricas Detalhadas</h1>
+
+      <!-- KPIs principais -->
+      <section class="grid grid-cols-3 gap-4 mb-6">
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Mensagens (30 dias)</p>
+          <h3 class="text-2xl font-bold">4.280</h3>
+          <p class="text-sm text-green-600">+18% vs mês anterior</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Tempo médio de resposta</p>
+          <h3 class="text-2xl font-bold">00:01:35</h3>
+          <p class="text-sm text-gray-600">Taxa de resolução: 82%</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Transbordos p/ humano</p>
+          <h3 class="text-2xl font-bold">22</h3>
+          <p class="text-sm text-gray-600">Meta: abaixo de 30</p>
+        </div>
+      </section>
+
+      <!-- Gráficos -->
+      <section class="grid grid-cols-2 gap-4 mb-6">
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Mensagens recebidas por dia</h4>
+          <canvas id="chart-msgs" height="160"></canvas>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Taxa de resposta (bot vs humano)</h4>
+          <canvas id="chart-responses" height="160"></canvas>
+        </div>
+      </section>
+
+      <!-- Termos principais -->
+      <section class="p-4 bg-white rounded shadow mb-6">
+        <h4 class="font-semibold mb-2">Principais termos mencionados</h4>
+        <ul class="list-disc ml-6 text-sm text-gray-700 space-y-1">
+          <li>inscrição</li>
+          <li>horários</li>
+          <li>preço / mensalidade</li>
+          <li>curso infantil</li>
+          <li>mangá</li>
+        </ul>
+      </section>
+
+      <footer class="text-sm text-gray-500 mt-6">
+        Dados de demonstração — conecte à API do WhatsApp Business para popular automaticamente.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const labels30 = Array.from({length:30}, (_,i)=> i+1);
+
+    new Chart(document.getElementById('chart-msgs'), {
+      type: 'line',
+      data: {
+        labels: labels30,
+        datasets: [{
+          label: 'Mensagens',
+          data: labels30.map(x => Math.round(80 + 60*Math.sin(x/4) + Math.random()*30)),
+          borderWidth: 2,
+          tension: 0.3
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    new Chart(document.getElementById('chart-responses'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Bot', 'Humano'],
+        datasets: [{
+          data: [82, 18],
+          backgroundColor: ['#60a5fa', '#f87171']
+        }]
+      },
+      options: { responsive: true }
+    });
+  </script>
+</body>
+</html>

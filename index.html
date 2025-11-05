@@ -3,198 +3,443 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard de Performance — Chatbot</title>
+  <title>Dashboard — Unificado (Menu Estático)</title>
+
+  <!-- Tailwind (CDN) -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" crossorigin href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
-    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 }
+    /* pequena ajuda visual para transição do main */
+    .fade-enter { opacity: 0; transform: translateY(6px); }
+    .fade-enter-active { transition: opacity .22s ease, transform .22s ease; opacity:1; transform:none; }
+    .fade-exit { opacity:1; }
+    .fade-exit-active { transition: opacity .18s ease; opacity:0; }
+
+    /* Ajuste global dos gráficos: limita a altura para evitar gráficos gigantes */
+    canvas {
+      max-height: 300px !important;
+      width: 100% !important;
+    }
   </style>
 </head>
-<body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
+<body class="font-display bg-background-light text-gray-800">
   <div class="min-h-screen flex">
-    <!-- Sidebar -->
-    <aside class="w-64 p-4 border-r border-gray-200 bg-white">
-      <!-- Logo ajustado: fundo branco, padding e object-contain para não cortar -->
-      <img src="logo_estudio_limoli.jpg"
-           alt="Logo Estúdio Limoli"
+    <!-- Sidebar (estático) -->
+    <aside class="w-64 p-4 border-r border-gray-200 bg-white flex-shrink-0">
+      <img src="logo_estudio_limoli.jpg" alt="Logo Estúdio Limoli"
            class="rounded-full w-20 h-20 object-contain mb-3 shadow-md bg-white p-1 border border-gray-200" />
       <h2 class="text-lg font-bold">Escola de Desenho</h2>
       <p class="text-sm text-gray-600 mb-4">Painel de performance</p>
-      <nav class="flex flex-col gap-2 text-sm">
-        <a href="#" class="py-2 px-3 rounded bg-blue-50">Visão Geral</a>
-        <a href="#whatsapp" class="py-2 px-3 rounded hover:bg-gray-100">WhatsApp</a>
-        <a href="#leads" class="py-2 px-3 rounded hover:bg-gray-100">Leads & Conversões</a>
-        <a href="#financeiro" class="py-2 px-3 rounded hover:bg-gray-100">Financeiro</a>
-        <a href="#ads" class="py-2 px-3 rounded hover:bg-gray-100">Google Ads</a>
-        <a href="#campanhas" class="py-2 px-3 rounded hover:bg-gray-100">Campanhas</a>
+
+      <nav id="sidebarNav" class="flex flex-col gap-2 text-sm">
+        <button data-target="#overview" class="text-left py-2 px-3 rounded bg-blue-50 w-full">Visão Geral</button>
+        <button data-target="#whatsapp" class="text-left py-2 px-3 rounded hover:bg-gray-100 w-full">WhatsApp</button>
+        <button data-target="#leads" class="text-left py-2 px-3 rounded hover:bg-gray-100 w-full">Leads & Conversões</button>
+        <button data-target="#financeiro" class="text-left py-2 px-3 rounded hover:bg-gray-100 w-full">Financeiro</button>
+        <button data-target="#ads" class="text-left py-2 px-3 rounded hover:bg-gray-100 w-full">Google Ads</button>
+        <button data-target="#campanhas" class="text-left py-2 px-3 rounded hover:bg-gray-100 w-full">Campanhas</button>
       </nav>
     </aside>
 
-    <!-- Main -->
-    <main class="flex-1 p-6">
-      <!-- Top KPIs -->
-      <header class="grid grid-cols-3 gap-4 mb-6">
-        <div class="p-4 bg-white rounded shadow">
-          <p class="text-sm text-gray-500">Novos contatos (30d)</p>
-          <h3 id="kpi-new-contacts" class="text-2xl font-bold">128</h3>
-          <p class="text-sm text-green-600">+15% vs mês anterior</p>
-        </div>
-        <div class="p-4 bg-white rounded shadow">
-          <p class="text-sm text-gray-500">Matriculados (mês)</p>
-          <h3 id="kpi-enrolled" class="text-2xl font-bold">27</h3>
-          <p class="text-sm text-green-600">+8%</p>
-        </div>
-        <div class="p-4 bg-white rounded shadow">
-          <p class="text-sm text-gray-500">Inadimplência</p>
-          <h3 id="kpi-delinquent" class="text-2xl font-bold text-red-600">8%</h3>
-          <p class="text-sm text-gray-500">R$ 1.240 em aberto</p>
-        </div>
-      </header>
+    <!-- Main (conteúdo trocado dinamicamente) -->
+    <main id="mainContent" class="flex-1 p-6 transition-all duration-200">
+      <!-- Overview (default) -->
+      <section id="overview" class="section">
+        <header class="grid grid-cols-3 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Novos contatos (30d)</p>
+            <h3 id="kpi-new-contacts" class="text-2xl font-bold">128</h3>
+            <p class="text-sm text-green-600">+15% vs mês anterior</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Matriculados (mês)</p>
+            <h3 id="kpi-enrolled" class="text-2xl font-bold">27</h3>
+            <p class="text-sm text-green-600">+8%</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Inadimplência</p>
+            <h3 id="kpi-delinquent" class="text-2xl font-bold text-red-600">8%</h3>
+            <p class="text-sm text-gray-500">R$ 1.240 em aberto</p>
+          </div>
+        </header>
 
-      <!-- Row: WhatsApp + Trends -->
-      <section class="grid grid-cols-3 gap-4 mb-6">
-        <div id="whatsapp" class="col-span-1 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Atendimentos WhatsApp</h4>
-          <canvas id="chart-whatsapp" height="200"></canvas>
-          <div class="mt-3 text-sm text-gray-600">
-            <p><strong>Tempo médio de resposta:</strong> <span id="avg-response">00:01:35</span></p>
-            <p><strong>Taxa resolvido pelo bot:</strong> <span id="bot-resolve">82%</span></p>
-            <p><strong>Transbordos p/ humano:</strong> <span id="handoffs">22</span></p>
+        <section class="grid grid-cols-3 gap-4 mb-6">
+          <div class="col-span-1 p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Atendimentos WhatsApp (Resumo)</h4>
+            <canvas id="overview-whatsapp" height="120"></canvas>
+          </div>
+          <div class="col-span-2 p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Leads por bairro (top 6)</h4>
+            <canvas id="overview-neigh" height="120"></canvas>
+          </div>
+        </section>
+
+        <footer class="text-sm text-gray-500 mt-6">Dados de demo — clique no menu para ver cada painel.</footer>
+      </section>
+
+      <!-- WhatsApp -->
+      <section id="whatsapp" class="section hidden">
+        <h1 class="text-2xl font-bold mb-6">WhatsApp — Métricas Detalhadas</h1>
+
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Mensagens (30 dias)</p>
+            <h3 class="text-2xl font-bold">4.280</h3>
+            <p class="text-sm text-green-600">+18% vs mês anterior</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Tempo médio de resposta</p>
+            <h3 class="text-2xl font-bold">00:01:35</h3>
+            <p class="text-sm text-gray-600">Taxa de resolução: 82%</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Transbordos p/ humano</p>
+            <h3 class="text-2xl font-bold">22</h3>
+            <p class="text-sm text-gray-600">Meta: abaixo de 30</p>
           </div>
         </div>
 
-        <div class="col-span-2 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Tendência de uso (30 dias)</h4>
-          <canvas id="chart-usage" height="200"></canvas>
-        </div>
-      </section>
-
-      <!-- Row: Leads by Bairro + Funnel -->
-      <section id="leads" class="grid grid-cols-3 gap-4 mb-6">
-        <div class="col-span-1 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Leads por bairro (top 6)</h4>
-          <canvas id="chart-neighborhoods" height="240"></canvas>
-        </div>
-
-        <div class="col-span-2 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Funil: Lead → Aula → Matrícula</h4>
-          <canvas id="chart-funnel" height="200"></canvas>
-          <div class="mt-2 text-sm text-gray-600">Ex: 2.103 leads → 420 agendados → 127 matriculados</div>
-        </div>
-      </section>
-
-      <!-- Row: Financeiro + Google Ads -->
-      <section id="financeiro" class="grid grid-cols-3 gap-4 mb-6">
-        <div class="col-span-1 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Financeiro</h4>
-          <p class="text-sm">Recebido (mês)</p>
-          <h3 id="kpi-revenue" class="text-2xl font-bold">R$ 12.340</h3>
-          <p class="text-sm text-red-600">Inadimplência: R$ 1.240</p>
-          <table class="w-full text-sm mt-3">
-            <tr><td>Pagamentos</td><td class="text-right">54</td></tr>
-            <tr><td>Méd. mensalidade</td><td class="text-right">R$ 98,00</td></tr>
-          </table>
-        </div>
-
-        <div id="ads" class="col-span-2 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Google Ads</h4>
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <p class="text-sm">Investimento (30d)</p>
-              <h3 id="kpi-ads-spend" class="text-2xl font-bold">R$ 1.230</h3>
-              <p class="text-sm">CPL: R$ 5,40</p>
-            </div>
-            <div>
-              <p class="text-sm">Cliques</p>
-              <h3 id="kpi-ads-clicks" class="text-2xl font-bold">1.845</h3>
-              <p class="text-sm">Conversões p/ WhatsApp: 512</p>
-            </div>
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Mensagens recebidas por dia</h4>
+            <canvas id="chart-msgs" height="160"></canvas>
           </div>
-          <canvas id="chart-ads" height="160" class="mt-4"></canvas>
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Taxa de resposta (bot vs humano)</h4>
+            <canvas id="chart-responses" height="160"></canvas>
+          </div>
         </div>
       </section>
 
-      <!-- Row: Campanhas promocionais -->
-      <section id="campanhas" class="grid grid-cols-3 gap-4 mb-6">
-        <div class="col-span-1 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Disparos promocionais</h4>
-          <p class="text-sm">Totais enviados</p>
-          <h3 id="kpi-sends" class="text-2xl font-bold">3.210</h3>
-          <p class="text-sm">Taxa de resposta: 12%</p>
+      <!-- Leads -->
+      <section id="leads" class="section hidden">
+        <h1 class="text-2xl font-bold mb-6">Leads & Conversões</h1>
+
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Total de Leads (30d)</p>
+            <h3 class="text-2xl font-bold">2.103</h3>
+            <p class="text-sm text-green-600">+12% vs mês anterior</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Agendados</p>
+            <h3 class="text-2xl font-bold">420</h3>
+            <p class="text-sm text-green-600">Taxa de conversão: 19%</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Matriculados</p>
+            <h3 class="text-2xl font-bold">127</h3>
+            <p class="text-sm text-blue-600">Taxa final: 6%</p>
+          </div>
         </div>
-        <div class="col-span-2 p-4 bg-white rounded shadow">
-          <h4 class="font-semibold mb-2">Quentes / Mornos / Frios</h4>
-          <canvas id="chart-temperature" height="120"></canvas>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Funil de Conversão</h4>
+            <canvas id="leads-funnel" height="160"></canvas>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Leads por Bairro</h4>
+            <canvas id="leads-neigh" height="160"></canvas>
+          </div>
+        </div>
+
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Origem dos Leads</h4>
+          <canvas id="leads-source" height="140"></canvas>
         </div>
       </section>
 
-      <!-- Footer -->
-      <footer class="text-sm text-gray-500 mt-6">
-        Dados de demonstração — conecte suas fontes (WhatsApp API, Google Ads, Google Sheets) para popular com dados reais.
-      </footer>
+      <!-- Financeiro -->
+      <section id="financeiro" class="section hidden">
+        <h1 class="text-2xl font-bold mb-6">Financeiro</h1>
+
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Recebido (mês)</p>
+            <h3 class="text-2xl font-bold">R$ 12.340</h3>
+            <p class="text-sm text-green-600">+6% vs mês anterior</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Pagamentos processados</p>
+            <h3 class="text-2xl font-bold">54</h3>
+            <p class="text-sm text-gray-600">Média mensal: 48</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Inadimplência</p>
+            <h3 class="text-2xl font-bold text-red-600">R$ 1.240</h3>
+            <p class="text-sm text-gray-500">Taxa: 8%</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Receita (12 meses)</h4>
+            <canvas id="finance-revenue" height="160"></canvas>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Inadimplência por vencimento</h4>
+            <canvas id="finance-aged" height="160"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Ads -->
+      <section id="ads" class="section hidden">
+        <h1 class="text-2xl font-bold mb-6">Google Ads</h1>
+
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Investimento (30d)</p>
+            <h3 class="text-2xl font-bold">R$ 1.230</h3>
+            <p class="text-sm text-green-600">CPC médio: R$ 0,67</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Cliques</p>
+            <h3 class="text-2xl font-bold">1.845</h3>
+            <p class="text-sm text-gray-600">CTR médio: 6,2%</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Conversões</p>
+            <h3 class="text-2xl font-bold">512</h3>
+            <p class="text-sm text-blue-600">CPL: R$ 2,40</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Investimento x Conversões</h4>
+            <canvas id="ads-spend-conv" height="160"></canvas>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">CTR e CPC</h4>
+            <canvas id="ads-ctr-cpc" height="160"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- Campanhas -->
+      <section id="campanhas" class="section hidden">
+        <h1 class="text-2xl font-bold mb-6">Campanhas Promocionais</h1>
+
+        <div class="grid grid-cols-3 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Disparos enviados</p>
+            <h3 class="text-2xl font-bold">3.210</h3>
+            <p class="text-sm text-green-600">+9% vs campanha anterior</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Taxa de resposta</p>
+            <h3 class="text-2xl font-bold">12%</h3>
+            <p class="text-sm text-blue-600">Melhor que média: 9%</p>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <p class="text-sm text-gray-500">Conversões diretas</p>
+            <h3 class="text-2xl font-bold">56</h3>
+            <p class="text-sm text-gray-600">Meta: 40</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6">
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Taxa de resposta por campanha</h4>
+            <canvas id="camp-responses" height="160"></canvas>
+          </div>
+          <div class="p-4 bg-white rounded shadow">
+            <h4 class="font-semibold mb-2">Distribuição quente/morno/frio</h4>
+            <canvas id="camp-temp" height="160"></canvas>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
+  <!-- Script: lógica de troca de seções + lazy init dos charts -->
   <script>
-    // Mock data (substitua pelas suas fontes reais)
-    const labels30 = Array.from({length:30}, (_,i)=> i+1);
+    // --- Helpers & state
+    const sections = Array.from(document.querySelectorAll('.section'));
+    const navButtons = Array.from(document.querySelectorAll('#sidebarNav [data-target]'));
+    const createdCharts = {}; // guarda nomes dos charts já criados
 
-    new Chart(document.getElementById('chart-whatsapp'), {
-      type: 'line',
-      data: {
-        labels: labels30,
-        datasets: [{
-          label: 'Mensagens enviadas',
-          data: labels30.map(x=> Math.round(80 + 60*Math.sin(x/4) + Math.random()*40)),
-          fill: true,
-          tension: 0.3,
-        }]
-      },
-      options: { responsive:true, plugins:{ legend:{ display:false } } }
+    function showSection(selector) {
+      const target = document.querySelector(selector);
+      if(!target) return;
+
+      // esconder todas
+      sections.forEach(s => {
+        if(s === target) return;
+        s.classList.add('hidden');
+      });
+
+      // mostrar o alvo
+      target.classList.remove('hidden');
+
+      // atualizar foco e ativo do menu
+      navButtons.forEach(btn => {
+        if(btn.dataset.target === selector) {
+          btn.classList.add('bg-blue-50');
+        } else {
+          btn.classList.remove('bg-blue-50');
+        }
+      });
+
+      // lazy-init charts conforme seção
+      if(selector === '#whatsapp') initWhatsAppCharts();
+      if(selector === '#leads') initLeadsCharts();
+      if(selector === '#financeiro') initFinanceCharts();
+      if(selector === '#ads') initAdsCharts();
+      if(selector === '#campanhas') initCampCharts();
+      if(selector === '#overview') initOverviewCharts();
+    }
+
+    // Wire up nav
+    navButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const target = btn.dataset.target;
+        showSection(target);
+
+        // optional: update URL hash without scrolling
+        history.replaceState(null, '', target);
+      });
     });
 
-    new Chart(document.getElementById('chart-usage'), {
-      type: 'line',
-      data: {
-        labels: labels30,
-        datasets: [{ label:'Usuários ativos', data: labels30.map(x=> Math.round(300 + 80*Math.cos(x/5) + Math.random()*60)), tension:0.25 }]
-      },
-      options:{ responsive:true }
-    });
+    // On load: open section based on hash or default
+    (function initialOpen(){
+      const hash = location.hash || '#overview';
+      // ensure formatting like '#whatsapp'
+      const valid = sections.some(s => '#' + s.id === hash);
+      showSection(valid ? hash : '#overview');
+    })();
 
-    new Chart(document.getElementById('chart-neighborhoods'), {
-      type: 'bar',
-      data: {
-        labels: ['Centro','Jardim','Vila Nova','Santa Bárbara','São José','Boa Vista'],
-        datasets: [{ label:'Leads', data:[2103,1845,1301,987,512,320]}]
-      },
-      options:{ indexAxis:'y', responsive:true }
-    });
+    // -----------------------------
+    // Chart init functions (lazy)
+    // -----------------------------
+    function initOverviewCharts(){
+      if(createdCharts.overview) return;
+      createdCharts.overview = true;
 
-    new Chart(document.getElementById('chart-funnel'), {
-      type: 'bar',
-      data: {
-        labels: ['Leads','Agendados','Matriculados'],
-        datasets:[{ label:'Quantidade', data:[2103,420,127], backgroundColor:['#93C5FD','#60A5FA','#2563EB'] }]
-      },
-      options:{ responsive:true }
-    });
+      new Chart(document.getElementById('overview-whatsapp'), {
+        type:'line',
+        data:{ labels:[1,7,14,21,28], datasets:[{label:'Msgs', data:[120,160,140,180,170], tension:0.3}] },
+        options:{ responsive:true, plugins:{ legend:{ display:false } } }
+      });
+      new Chart(document.getElementById('overview-neigh'), {
+        type:'bar',
+        data:{ labels:['Centro','Jardim','Vila Nova','Santa Bárbara','São José','Boa Vista'], datasets:[{label:'Leads', data:[210,184,130,98,51,32]}] },
+        options:{ indexAxis:'y', responsive:true }
+      });
+    }
 
-    new Chart(document.getElementById('chart-ads'), {
-      type: 'line',
-      data: { labels: ['Semana 1','Semana 2','Semana 3','Semana 4'], datasets:[{ label:'Cliques', data:[420,485,510,430], tension:0.3 },{ label:'Conversões', data:[120,145,135,112], tension:0.3 }] },
-      options:{ responsive:true }
-    });
+    function initWhatsAppCharts(){
+      if(createdCharts.whatsapp) return;
+      createdCharts.whatsapp = true;
 
-    new Chart(document.getElementById('chart-temperature'), {
-      type: 'doughnut',
-      data: { labels:['Quente','Morno','Frio'], datasets:[{ data:[72,210,192], backgroundColor:['#ef4444','#f59e0b','#60a5fa'] }] },
-      options:{ responsive:true }
+      const labels30 = Array.from({length:30}, (_,i)=> i+1);
+      new Chart(document.getElementById('chart-msgs'), {
+        type: 'line',
+        data: { labels: labels30, datasets:[{ label:'Mensagens', data: labels30.map(x=> Math.round(80+60*Math.sin(x/4)+Math.random()*30)), tension:0.3 }] },
+        options:{ responsive:true, plugins:{ legend:{ display:false } } }
+      });
+
+      new Chart(document.getElementById('chart-responses'), {
+        type: 'doughnut',
+        data: { labels:['Bot','Humano'], datasets:[{ data:[82,18], backgroundColor:['#60a5fa','#f87171'] }] },
+        options:{ responsive:true }
+      });
+    }
+
+    function initLeadsCharts(){
+      if(createdCharts.leads) return;
+      createdCharts.leads = true;
+
+      new Chart(document.getElementById('leads-funnel'), {
+        type:'bar',
+        data:{ labels:['Leads','Agendados','Matriculados'], datasets:[{ label:'Quantidade', data:[2103,420,127], backgroundColor:['#93C5FD','#60A5FA','#2563EB'] }]},
+        options:{ responsive:true, plugins:{ legend:{ display:false } } }
+      });
+
+      new Chart(document.getElementById('leads-neigh'), {
+        type:'bar',
+        data:{ labels:['Centro','Jardim','Vila Nova','Santa Bárbara','São José','Boa Vista'], datasets:[{ label:'Leads', data:[650,430,270,190,150,85], backgroundColor:'#60A5FA' }]},
+        options:{ indexAxis:'y', responsive:true }
+      });
+
+      new Chart(document.getElementById('leads-source'), {
+        type:'doughnut',
+        data:{ labels:['Google Ads','Instagram','Indicação','Site','Outros'], datasets:[{ data:[45,30,15,7,3], backgroundColor:['#2563eb','#f59e0b','#10b981','#a855f7','#9ca3af'] }]},
+        options:{ responsive:true, plugins:{ legend:{ position:'bottom' } } }
+      });
+    }
+
+    function initFinanceCharts(){
+      if(createdCharts.financeiro) return;
+      createdCharts.financeiro = true;
+
+      const months = ['Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025'];
+      const revenueValues = [8200,7600,9400,8800,9700,10240,11000,9800,12000,11500,12340,12340];
+
+      new Chart(document.getElementById('finance-revenue'), {
+        type:'line',
+        data:{ labels: months, datasets:[{ data: revenueValues, fill:true, tension:0.3, borderWidth:2 }]},
+        options:{ responsive:true, plugins:{ legend:{ display:false } } }
+      });
+
+      new Chart(document.getElementById('finance-aged'), {
+        type:'doughnut',
+        data:{ labels:['0-30 dias','31-60 dias','61-90 dias','>90 dias'], datasets:[{ data:[8200,320,620,1240], backgroundColor:['#60A5FA','#FBBF24','#F97316','#F87171'] }]},
+        options:{ responsive:true, plugins:{ legend:{ position:'bottom' } } }
+      });
+    }
+
+    function initAdsCharts(){
+      if(createdCharts.ads) return;
+      createdCharts.ads = true;
+
+      const weeks = ['Semana 1','Semana 2','Semana 3','Semana 4'];
+      const spend = [300,320,290,320];
+      const conv = [120,145,135,112];
+      const clicks = [420,485,510,430];
+      const ctr = [5.8,6.2,6.6,5.9];
+      const cpc = spend.map((s,i) => +(s/clicks[i]).toFixed(2));
+
+      new Chart(document.getElementById('ads-spend-conv'), {
+        type:'bar',
+        data:{ labels: weeks, datasets:[ { label:'Investido', data: spend, yAxisID:'y1', backgroundColor:'#60A5FA' }, { label:'Conversões', data: conv, yAxisID:'y2', backgroundColor:'#34D399' } ] },
+        options:{ responsive:true, scales:{ y1:{ type:'linear', position:'left', title:{ display:true, text:'R$' } }, y2:{ type:'linear', position:'right', grid:{ drawOnChartArea:false }, title:{ display:true, text:'Conversões' } } }, plugins:{ legend:{ position:'bottom' } } }
+      });
+
+      new Chart(document.getElementById('ads-ctr-cpc'), {
+        type:'line',
+        data:{ labels: weeks, datasets:[ { label:'CTR (%)', data: ctr, tension:0.3, borderWidth:2 }, { label:'CPC (R$)', data: cpc, tension:0.3, borderWidth:2 } ] },
+        options:{ responsive:true, plugins:{ legend:{ position:'bottom' } } }
+      });
+    }
+
+    function initCampCharts(){
+      if(createdCharts.campanhas) return;
+      createdCharts.campanhas = true;
+
+      new Chart(document.getElementById('camp-responses'), {
+        type:'bar',
+        data:{ labels:['Volta às Aulas','Férias Criativas','Dia das Crianças'], datasets:[{ data:[12,10,8], backgroundColor:['#3B82F6','#60A5FA','#93C5FD'] }]},
+        options:{ responsive:true, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } }
+      });
+
+      new Chart(document.getElementById('camp-temp'), {
+        type:'doughnut',
+        data:{ labels:['Quente','Morno','Frio'], datasets:[{ data:[72,210,192], backgroundColor:['#ef4444','#f59e0b','#60a5fa'] }]},
+        options:{ responsive:true, plugins:{ legend:{ position:'bottom' } } }
+      });
+    }
+
+    // Resize charts when window resizes (Chart.js handles resize, but some hidden->visible cases need update)
+    window.addEventListener('resize', () => {
+      // If needed, you can loop createdCharts and call chart.update() — left simple for now.
     });
   </script>
 </body>

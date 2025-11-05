@@ -1,0 +1,144 @@
+<!doctype html>
+<html class="light" lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — Financeiro</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="font-display bg-background-light text-gray-800">
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 p-4 border-r border-gray-200 bg-white">
+      <img src="logo_estudio_limoli.jpg"
+           alt="Logo Estúdio Limoli"
+           class="rounded-full w-20 h-20 object-contain mb-3 shadow-md bg-white p-1 border border-gray-200" />
+      <h2 class="text-lg font-bold">Escola de Desenho</h2>
+      <p class="text-sm text-gray-600 mb-4">Painel de performance</p>
+      <nav class="flex flex-col gap-2 text-sm">
+        <a href="index.html" class="py-2 px-3 rounded hover:bg-gray-100">Visão Geral</a>
+        <a href="whatsapp_metricas.html" class="py-2 px-3 rounded hover:bg-gray-100">WhatsApp</a>
+        <a href="leads.html" class="py-2 px-3 rounded hover:bg-gray-100">Leads & Conversões</a>
+        <a href="financeiro.html" class="py-2 px-3 rounded bg-blue-50">Financeiro</a>
+        <a href="Google ADS.html" class="py-2 px-3 rounded hover:bg-gray-100">Google Ads</a>
+        <a href="campanhas.html" class="py-2 px-3 rounded hover:bg-gray-100">Campanhas</a>
+      </nav>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 p-6">
+      <h1 class="text-2xl font-bold mb-6">Financeiro — Visão e Detalhes</h1>
+
+      <!-- KPIs -->
+      <section class="grid grid-cols-3 gap-4 mb-6">
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Recebido (mês)</p>
+          <h3 id="kpi-revenue" class="text-2xl font-bold">R$ 12.340</h3>
+          <p class="text-sm text-green-600">+6% vs mês anterior</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Pagamentos processados</p>
+          <h3 id="kpi-payments" class="text-2xl font-bold">54</h3>
+          <p class="text-sm text-gray-600">Média mensal: 48</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Inadimplência</p>
+          <h3 id="kpi-delinquent" class="text-2xl font-bold text-red-600">R$ 1.240</h3>
+          <p class="text-sm text-gray-500">Taxa: 8%</p>
+        </div>
+      </section>
+
+      <!-- Charts: Revenue trend + Aged receivables -->
+      <section class="grid grid-cols-2 gap-4 mb-6">
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Receita (últimos 12 meses)</h4>
+          <canvas id="chart-revenue" height="160"></canvas>
+          <div class="mt-2 text-sm text-gray-600">Valores acumulados por mês (simulação).</div>
+        </div>
+
+        <div class="p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Inadimplência por vencimento</h4>
+          <canvas id="chart-aged" height="160"></canvas>
+          <div class="mt-2 text-sm text-gray-600">Distribuição das faturas em atraso.</div>
+        </div>
+      </section>
+
+      <!-- Table: Próximos recebimentos / últimas transações -->
+      <section class="grid grid-cols-3 gap-4 mb-6">
+        <div class="col-span-2 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-3">Últimas transações</h4>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead class="text-left text-gray-600">
+                <tr>
+                  <th class="pb-2">Data</th>
+                  <th class="pb-2">Aluno</th>
+                  <th class="pb-2">Tipo</th>
+                  <th class="pb-2 text-right">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-t"><td class="py-2">01/11/2025</td><td class="py-2">Leonardo</td><td class="py-2">Mensalidade</td><td class="py-2 text-right">R$ 98,00</td></tr>
+                <tr class="border-t"><td class="py-2">30/10/2025</td><td class="py-2">Mariana D.</td><td class="py-2">Mensalidade</td><td class="py-2 text-right">R$ 98,00</td></tr>
+                <tr class="border-t"><td class="py-2">29/10/2025</td><td class="py-2">Cleiton B.</td><td class="py-2">Aula avulsa</td><td class="py-2 text-right">R$ 60,00</td></tr>
+                <tr class="border-t"><td class="py-2">28/10/2025</td><td class="py-2">Sabrina</td><td class="py-2">Mensalidade (atraso)</td><td class="py-2 text-right text-red-600">R$ 98,00</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="col-span-1 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-3">Próximos recebimentos</h4>
+          <ul class="text-sm space-y-2">
+            <li><strong>05/11/2025</strong> — Gabriel — R$ 98,00</li>
+            <li><strong>07/11/2025</strong> — Júlia — R$ 98,00</li>
+            <li><strong>10/11/2025</strong> — Turma infantil — R$ 980,00</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="text-sm text-gray-500 mt-6">
+        Dados de demonstração — posso integrar conciliação automática via Google Sheets, Stripe ou sistema bancário se quiser.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // Revenue (12 months) - mock data
+    const months = ['Nov 2024','Dec 2024','Jan 2025','Feb 2025','Mar 2025','Apr 2025','May 2025','Jun 2025','Jul 2025','Aug 2025','Sep 2025','Oct 2025'];
+    const revenueValues = [8200, 7600, 9400, 8800, 9700, 10240, 11000, 9800, 12000, 11500, 12340, 12340];
+
+    new Chart(document.getElementById('chart-revenue'), {
+      type: 'line',
+      data: {
+        labels: months,
+        datasets: [{
+          label: 'Receita (R$)',
+          data: revenueValues,
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+
+    // Aged receivables (mock)
+    new Chart(document.getElementById('chart-aged'), {
+      type: 'doughnut',
+      data: {
+        labels: ['0-30 dias','31-60 dias','61-90 dias','>90 dias'],
+        datasets: [{
+          data: [8200, 320, 620, 1240],
+          backgroundColor: ['#60A5FA','#FBBF24','#F97316','#F87171']
+        }]
+      },
+      options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+    });
+  </script>
+</body>
+</html>
