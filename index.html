@@ -9,88 +9,195 @@
   <link rel="preconnect" crossorigin href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary: '#359EFF',
-            'background-light': '#f5f7f8',
-            'background-dark': '#0f1923',
-            'card-light': '#ffffff',
-            'card-dark': '#1a2230',
-            'text-light': '#0d121b',
-            'text-dark': '#f0f2f5',
-            'subtext-light': '#4c669a',
-            'subtext-dark': '#94a3b8',
-            'border-light': '#e2e8f0',
-            'border-dark': '#334155',
-            success: '#07883b',
-            danger: '#e73908'
-          },
-          fontFamily: { display: ['Lexend', 'ui-sans-serif', 'system-ui'] },
-          borderRadius: { DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem', full: '9999px' }
-        }
-      }
-    };
-  </script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24 }
+  </style>
 </head>
 <body class="font-display bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark">
-  <div class="relative flex min-h-screen w-full">
-    <aside class="flex h-screen flex-col justify-between border-r border-border-light bg-card-light p-4 dark:border-border-dark dark:bg-card-dark sticky top-0 w-64">
-      <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3">
-          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5SHbTa1nltmxWO2PyBrMZDALUSD2SzaaFNKWUMk06Pc9N4bd-d3HqRUAtZCEbxMMxiOPyzBFL25b42W_UuKbUSD8GW8MXh1sADmZC8gWZ2Q4poIuGkpNS_MtopumGv9xqW0GivHB0MdnVKez5ywRMFtJT7nP2kTW1GexPyrXlBFLFehPhDEWwywatw0gc1KCKjKw3nAhebO_KAiWKej1pFRm5mGYw3gb14E5ZEXcNC6kkP7iguowuoJbS84Dtwchhsf9iOH36OZ1A" alt="Logo Escola de Desenho" class="rounded-full object-cover" width="44" height="44"> 
-          <div class="flex flex-col">
-            <h1 class="text-base font-medium">Escola de Desenho</h1>
-            <p class="text-sm text-subtext-light dark:text-subtext-dark">Chatbot Manager</p>
-          </div>
-        </div>
-        <nav class="flex flex-col gap-2" aria-label="Navegação principal">
-          <a class="flex items-center gap-3 rounded-lg bg-primary/10 px-3 py-2 text-primary" href="#" aria-current="page">
-            <span class="material-symbols-outlined">dashboard</span>
-            <span class="text-sm font-medium">Dashboard</span>
-          </a>
-          <a class="flex items-center gap-3 px-3 py-2 hover:bg-primary/5 rounded-lg" href="#">
-            <span class="material-symbols-outlined text-subtext-light">bar_chart</span>
-            <span class="text-sm font-medium">Analytics</span>
-          </a>
-          <a class="flex items-center gap-3 px-3 py-2 hover:bg-primary/5 rounded-lg" href="#">
-            <span class="material-symbols-outlined text-subtext-light">chat</span>
-            <span class="text-sm font-medium">Conversations</span>
-          </a>
-          <a class="flex items-center gap-3 px-3 py-2 hover:bg-primary/5 rounded-lg" href="#">
-            <span class="material-symbols-outlined text-subtext-light">settings</span>
-            <span class="text-sm font-medium">Settings</span>
-          </a>
-        </nav>
-      </div>
+  <div class="min-h-screen flex">
+    <!-- Sidebar -->
+    <aside class="w-64 p-4 border-r border-gray-200 bg-white">
+      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5SHbTa1nltmxWO2PyBrMZDALUSD2SzaaFNKWUMk06Pc9N4bd-d3HqRUAtZCEbxMMxiOPyzBFL25b42W_UuKbUSD8GW8MXh1sADmZC8gWZ2Q4poIuGkpNS_MtopumGv9xqW0GivHB0MdnVKez5ywRMFtJT7nP2kTW1GexPyrXlBFLFehPhDEWwywatw0gc1KCKjKw3nAhebO_KAiWKej1pFRm5mGYw3gb14E5ZEXcNC6kkP7iguowuoJbS84Dtwchhsf9iOH36OZ1A" alt="Logo" class="rounded-full w-12 h-12 mb-3">
+      <h2 class="text-lg font-bold">Escola de Desenho</h2>
+      <p class="text-sm text-gray-600 mb-4">Painel de performance</p>
+      <nav class="flex flex-col gap-2 text-sm">
+        <a href="#" class="py-2 px-3 rounded bg-blue-50">Visão Geral</a>
+        <a href="#whatsapp" class="py-2 px-3 rounded hover:bg-gray-100">WhatsApp</a>
+        <a href="#leads" class="py-2 px-3 rounded hover:bg-gray-100">Leads & Conversões</a>
+        <a href="#financeiro" class="py-2 px-3 rounded hover:bg-gray-100">Financeiro</a>
+        <a href="#ads" class="py-2 px-3 rounded hover:bg-gray-100">Google Ads</a>
+        <a href="#campanhas" class="py-2 px-3 rounded hover:bg-gray-100">Campanhas</a>
+      </nav>
     </aside>
-    <main class="w-full flex-1 p-6 lg:p-8">
-      <div class="mx-auto max-w-7xl">
-        <h1 class="text-3xl font-bold mb-6">Dashboard de Performance - Chatbot</h1>
-        <p class="text-base text-subtext-light mb-8">Mostrando dados dos últimos 30 dias</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div class="rounded-xl border border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-subtext-light">group_add</span>
-              <h2 class="text-base font-medium">Novos Leads</h2>
-            </div>
-            <p class="text-4xl font-bold">128</p>
-            <p class="text-success text-sm">+15% vs. mês anterior</p>
-          </div>
-          <div class="rounded-xl border border-border-light bg-card-light p-6 dark:border-border-dark dark:bg-card-dark">
-            <div class="flex items-center gap-2">
-              <span class="material-symbols-outlined text-subtext-light">sentiment_satisfied</span>
-              <h2 class="text-base font-medium">Satisfação (CSAT)</h2>
-            </div>
-            <p class="text-4xl font-bold">92%</p>
-            <p class="text-success text-sm">+3% vs. mês anterior</p>
+
+    <!-- Main -->
+    <main class="flex-1 p-6">
+      <!-- Top KPIs -->
+      <header class="grid grid-cols-3 gap-4 mb-6">
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Novos contatos (30d)</p>
+          <h3 id="kpi-new-contacts" class="text-2xl font-bold">128</h3>
+          <p class="text-sm text-green-600">+15% vs mês anterior</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Matriculados (mês)</p>
+          <h3 id="kpi-enrolled" class="text-2xl font-bold">27</h3>
+          <p class="text-sm text-green-600">+8%</p>
+        </div>
+        <div class="p-4 bg-white rounded shadow">
+          <p class="text-sm text-gray-500">Inadimplência</p>
+          <h3 id="kpi-delinquent" class="text-2xl font-bold text-red-600">8%</h3>
+          <p class="text-sm text-gray-500">R$ 1.240 em aberto</p>
+        </div>
+      </header>
+
+      <!-- Row: WhatsApp + Trends -->
+      <section class="grid grid-cols-3 gap-4 mb-6">
+        <div id="whatsapp" class="col-span-1 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Atendimentos WhatsApp</h4>
+          <canvas id="chart-whatsapp" height="200"></canvas>
+          <div class="mt-3 text-sm text-gray-600">
+            <p><strong>Tempo médio de resposta:</strong> <span id="avg-response">00:01:35</span></p>
+            <p><strong>Taxa resolvido pelo bot:</strong> <span id="bot-resolve">82%</span></p>
+            <p><strong>Transbordos p/ humano:</strong> <span id="handoffs">22</span></p>
           </div>
         </div>
-      </div>
+
+        <div class="col-span-2 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Tendência de uso (30 dias)</h4>
+          <canvas id="chart-usage" height="200"></canvas>
+        </div>
+      </section>
+
+      <!-- Row: Leads by Bairro + Funnel -->
+      <section id="leads" class="grid grid-cols-3 gap-4 mb-6">
+        <div class="col-span-1 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Leads por bairro (top 6)</h4>
+          <canvas id="chart-neighborhoods" height="240"></canvas>
+        </div>
+
+        <div class="col-span-2 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Funil: Lead → Aula → Matrícula</h4>
+          <canvas id="chart-funnel" height="200"></canvas>
+          <div class="mt-2 text-sm text-gray-600">Ex: 2.103 leads → 420 agendados → 127 matriculados</div>
+        </div>
+      </section>
+
+      <!-- Row: Financeiro + Google Ads -->
+      <section id="financeiro" class="grid grid-cols-3 gap-4 mb-6">
+        <div class="col-span-1 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Financeiro</h4>
+          <p class="text-sm">Recebido (mês)</p>
+          <h3 id="kpi-revenue" class="text-2xl font-bold">R$ 12.340</h3>
+          <p class="text-sm text-red-600">Inadimplência: R$ 1.240</p>
+          <table class="w-full text-sm mt-3">
+            <tr><td>Pagamentos</td><td class="text-right">54</td></tr>
+            <tr><td>Méd. mensalidade</td><td class="text-right">R$ 98,00</td></tr>
+          </table>
+        </div>
+
+        <div id="ads" class="col-span-2 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Google Ads</h4>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="text-sm">Investimento (30d)</p>
+              <h3 id="kpi-ads-spend" class="text-2xl font-bold">R$ 1.230</h3>
+              <p class="text-sm">CPL: R$ 5,40</p>
+            </div>
+            <div>
+              <p class="text-sm">Cliques</p>
+              <h3 id="kpi-ads-clicks" class="text-2xl font-bold">1.845</h3>
+              <p class="text-sm">Conversões p/ WhatsApp: 512</p>
+            </div>
+          </div>
+          <canvas id="chart-ads" height="160" class="mt-4"></canvas>
+        </div>
+      </section>
+
+      <!-- Row: Campanhas promocionais -->
+      <section id="campanhas" class="grid grid-cols-3 gap-4 mb-6">
+        <div class="col-span-1 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Disparos promocionais</h4>
+          <p class="text-sm">Totais enviados</p>
+          <h3 id="kpi-sends" class="text-2xl font-bold">3.210</h3>
+          <p class="text-sm">Taxa de resposta: 12%</p>
+        </div>
+        <div class="col-span-2 p-4 bg-white rounded shadow">
+          <h4 class="font-semibold mb-2">Quentes / Mornos / Frios</h4>
+          <canvas id="chart-temperature" height="120"></canvas>
+        </div>
+      </section>
+
+      <!-- Footer / notas -->
+      <footer class="text-sm text-gray-500 mt-6">Dados de demo — conecte suas fontes (WhatsApp API, Google Ads, Google Sheets) para popular com dados reais.</footer>
     </main>
   </div>
+
+  <script>
+    // Mock data (substitua pelas suas fontes reais)
+    const labels30 = Array.from({length:30}, (_,i)=> i+1);
+
+    // WhatsApp messages trend
+    new Chart(document.getElementById('chart-whatsapp'), {
+      type: 'line',
+      data: {
+        labels: labels30,
+        datasets: [{
+          label: 'Mensagens enviadas',
+          data: labels30.map(x=> Math.round(80 + 60*Math.sin(x/4) + Math.random()*40)),
+          fill: true,
+          tension: 0.3,
+        }]
+      },
+      options: { responsive:true, plugins:{ legend:{ display:false } } }
+    });
+
+    // Usage trend
+    new Chart(document.getElementById('chart-usage'), {
+      type: 'line',
+      data: {
+        labels: labels30,
+        datasets: [{ label:'Usuários ativos', data: labels30.map(x=> Math.round(300 + 80*Math.cos(x/5) + Math.random()*60)), tension:0.25 }]
+      },
+      options:{ responsive:true }
+    });
+
+    // Neighborhoods (bar)
+    new Chart(document.getElementById('chart-neighborhoods'), {
+      type: 'bar',
+      data: {
+        labels: ['Centro','Jardim','Vila Nova','Santa Bárbara','São José','Boa Vista'],
+        datasets: [{ label:'Leads', data:[2103,1845,1301,987,512,320]}]
+      },
+      options:{ indexAxis:'y', responsive:true }
+    });
+
+    // Funnel (simulated as stacked horizontal bars)
+    new Chart(document.getElementById('chart-funnel'), {
+      type: 'bar',
+      data: {
+        labels: ['Leads','Agendados','Matriculados'],
+        datasets:[{ label:'Quantidade', data:[2103,420,127], backgroundColor:['#93C5FD','#60A5FA','#2563EB'] }]
+      },
+      options:{ responsive:true }
+    });
+
+    // Ads (bar)
+    new Chart(document.getElementById('chart-ads'), {
+      type: 'line',
+      data: { labels: ['Semana 1','Semana 2','Semana 3','Semana 4'], datasets:[{ label:'Cliques', data:[420,485,510,430], tension:0.3 },{ label:'Conversões', data:[120,145,135,112], tension:0.3 }] },
+      options:{ responsive:true }
+    });
+
+    // Temperature (doughnut)
+    new Chart(document.getElementById('chart-temperature'), {
+      type: 'doughnut',
+      data: { labels:['Quente','Morno','Frio'], datasets:[{ data:[72,210,192], backgroundColor:['#ef4444','#f59e0b','#60a5fa'] }] },
+      options:{ responsive:true }
+    });
+
+  </script>
 </body>
 </html>
