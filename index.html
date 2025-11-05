@@ -19,7 +19,8 @@
   <div class="min-h-screen flex">
     <!-- Sidebar -->
     <aside class="w-64 p-4 border-r border-gray-200 bg-white">
-      <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5SHbTa1nltmxWO2PyBrMZDALUSD2SzaaFNKWUMk06Pc9N4bd-d3HqRUAtZCEbxMMxiOPyzBFL25b42W_UuKbUSD8GW8MXh1sADmZC8gWZ2Q4poIuGkpNS_MtopumGv9xqW0GivHB0MdnVKez5ywRMFtJT7nP2kTW1GexPyrXlBFLFehPhDEWwywatw0gc1KCKjKw3nAhebO_KAiWKej1pFRm5mGYw3gb14E5ZEXcNC6kkP7iguowuoJbS84Dtwchhsf9iOH36OZ1A" alt="Logo" class="rounded-full w-12 h-12 mb-3">
+      <!-- ✅ NOVO LOGO LOCAL -->
+      <img src="logo_estudio_limoli.jpg" alt="Logo Estúdio Limoli" class="rounded-full w-16 h-16 mb-3 shadow-md">
       <h2 class="text-lg font-bold">Escola de Desenho</h2>
       <p class="text-sm text-gray-600 mb-4">Painel de performance</p>
       <nav class="flex flex-col gap-2 text-sm">
@@ -130,8 +131,10 @@
         </div>
       </section>
 
-      <!-- Footer / notas -->
-      <footer class="text-sm text-gray-500 mt-6">Dados de demo — conecte suas fontes (WhatsApp API, Google Ads, Google Sheets) para popular com dados reais.</footer>
+      <!-- Footer -->
+      <footer class="text-sm text-gray-500 mt-6">
+        Dados de demonstração — conecte suas fontes (WhatsApp API, Google Ads, Google Sheets) para popular com dados reais.
+      </footer>
     </main>
   </div>
 
@@ -139,7 +142,6 @@
     // Mock data (substitua pelas suas fontes reais)
     const labels30 = Array.from({length:30}, (_,i)=> i+1);
 
-    // WhatsApp messages trend
     new Chart(document.getElementById('chart-whatsapp'), {
       type: 'line',
       data: {
@@ -154,7 +156,6 @@
       options: { responsive:true, plugins:{ legend:{ display:false } } }
     });
 
-    // Usage trend
     new Chart(document.getElementById('chart-usage'), {
       type: 'line',
       data: {
@@ -164,7 +165,6 @@
       options:{ responsive:true }
     });
 
-    // Neighborhoods (bar)
     new Chart(document.getElementById('chart-neighborhoods'), {
       type: 'bar',
       data: {
@@ -174,7 +174,6 @@
       options:{ indexAxis:'y', responsive:true }
     });
 
-    // Funnel (simulated as stacked horizontal bars)
     new Chart(document.getElementById('chart-funnel'), {
       type: 'bar',
       data: {
@@ -184,20 +183,17 @@
       options:{ responsive:true }
     });
 
-    // Ads (bar)
     new Chart(document.getElementById('chart-ads'), {
       type: 'line',
       data: { labels: ['Semana 1','Semana 2','Semana 3','Semana 4'], datasets:[{ label:'Cliques', data:[420,485,510,430], tension:0.3 },{ label:'Conversões', data:[120,145,135,112], tension:0.3 }] },
       options:{ responsive:true }
     });
 
-    // Temperature (doughnut)
     new Chart(document.getElementById('chart-temperature'), {
       type: 'doughnut',
       data: { labels:['Quente','Morno','Frio'], datasets:[{ data:[72,210,192], backgroundColor:['#ef4444','#f59e0b','#60a5fa'] }] },
       options:{ responsive:true }
     });
-
   </script>
 </body>
 </html>
