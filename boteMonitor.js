@@ -1,22 +1,40 @@
-// index.js (ou main.js) - CÓDIGO FINAL COM NOTIFICAÇÕES APENAS NO PRIVADO
+// -----------------------------------------------------------------------------------
+// CÓDIGO UNIFICADO: BOT + SERVIDOR EXPRESS (API PARA QR CODE)
+//
+// Este arquivo contém:
+// 1. A lógica original do Trello/Cloudinary/WhatsApp.
+// 2. Um servidor Express para evitar o erro de 'Port scan timeout' no Render.
+// 3. A rota /qrcode que permite ao dashboard buscar o código de conexão.
+// -----------------------------------------------------------------------------------
 
+// --- IMPORTS ---
 require('dotenv').config();
-const qrcode = require('qrcode-terminal');
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const fetch = require('node-fetch');
 
-// 💡 Importa a API do Cloudinary
+// Imports para a API/Servidor Web
+const express = require('express');
+const qrcode = require('qrcode');
+
+// 💡 Importa a API do Cloudinary (Presumindo que este arquivo existe no seu projeto)
 const { uploadMediaToCloudinary } = require('./cloudinary-api'); 
 
 // ======================================================
-// 🔹 CONFIGURAÇÕES PRINCIPAIS E TRELLO
+// 🔹 CONFIGURAÇÕES E VARIÁVEIS GLOBAIS
 // ======================================================
 
-// 🚨 NOVO: SEU NÚMERO DE WHATSAPP PRIVADO PARA NOTIFICAÇÕES
+const app = express();
+const port = process.env.PORT || 3000;
+const SESSION_NAME = 'bot-monitor-session'; // Nome da sessão para o LocalAuth
+
+// Variável que armazena o Base64 do QR Code ou o status de conexão
+let qrCodeBase64 = ''; // Valores possíveis: Base64, 'READY', 'DISCONNECTED', 'AUTH_FAILURE'
+
+// 🚨 SEU NÚMERO DE WHATSAPP PRIVADO PARA NOTIFICAÇÕES
 const MEU_WHATSAPP_PRIVADO = '5519992897178@c.us'; 
 const TARGET_GROUP_ID = process.env.TARGET_GROUP_ID || '5519988247466-1584793498@g.us';
 
-// 🔹 CREDENCIAIS DO TRELLO
+// 🔹 CREDENCIAIS DO TRELLO (Carregadas do .env)
 const TRELLO_API_KEY = process.env.TRELLO_API_KEY; 
 const TRELLO_AUTH_TOKEN = process.env.TRELLO_AUTH_TOKEN;
 const TRELLO_BOARD_ID = process.env.TRELLO_BOARD_ID; 
@@ -27,13 +45,15 @@ const TRELLO_LIST_ID = process.env.TRELLO_LIST_ID;
 // 🔍 VALIDAÇÃO INICIAL
 // ======================================================
 if (!TRELLO_API_KEY || !TRELLO_AUTH_TOKEN || !TRELLO_BOARD_ID || !TRELLO_LIST_ID) {
-    console.error('❌ Erro: Uma das variáveis do TRELLO (API_KEY, AUTH_TOKEN, BOARD_ID, LIST_ID) não está definida no arquivo .env!');
+    console.error('❌ Erro: Uma das variáveis do TRELLO não está definida no arquivo .env!');
     process.exit(1);
 }
 
 // ======================================================
 // 🔹 FUNÇÕES DO TRELLO (Mantidas inalteradas)
 // ======================================================
+
+// [Omitindo findCardByTitle, createCard, attachUrlToCard para brevidade, mas elas permanecem no seu código]
 
 async function findCardByTitle(alunoNome) {
     const searchUrl = `https://api.trello.com/1/boards/${TRELLO_BOARD_ID}/cards?key=${TRELLO_API_KEY}&token=${TRELLO_AUTH_TOKEN}&fields=name,id`;
@@ -106,15 +126,38 @@ async function attachUrlToCard(cardId, title, url) {
 // 🔹 INICIALIZA CLIENTE WHATSAPP e Eventos QR/Ready...
 // ======================================================
 const client = new Client({
-    authStrategy: new LocalAuth(),
+    authStrategy: new LocalAuth({ clientId: SESSION_NAME }),
+    puppeteer: {
+        headless: true, 
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-gpu',
+            '--disable-dev-shm-usage'
+        ],
+    },
 });
 
-client.on('qr', qr => {
-    qrcode.generate(qr, { small: true });
+// ✅ ATUALIZAÇÃO CRÍTICA: Geração do QR Code em Base64 para a API
+client.on('qr', async (qr) => {
+    console.log('QR Code solicitado. Gerando Base64 para API...');
+    qrCodeBase64 = await qrcode.toDataURL(qr);
+    console.log('QR Code Base64 gerado e pronto para ser consumido pelo Dashboard.');
 });
 
 client.on('ready', () => {
     console.log('✅ Cliente conectado e pronto!');
+    qrCodeBase64 = 'READY'; // Sinaliza que a conexão está OK
+});
+
+client.on('auth_failure', (msg) => {
+    console.error('Authentication failure: ', msg);
+    qrCodeBase64 = 'AUTH_FAILURE';
+});
+
+client.on('disconnected', (reason) => {
+    console.log('Client was disconnected: ', reason);
+    qrCodeBase64 = 'DISCONNECTED'; 
 });
 
 
@@ -130,12 +173,11 @@ client.on('message', async msg => {
         let cardId = null;
         let isNewCard = false; 
         
-        // 🚨 MUDANÇA: Aviso de legenda incompleta agora também vai para o privado
+        // Aviso de legenda incompleta vai para o privado
         if (alunoNome.length < 3) {
-            const warning = '⚠️ ALERTA: Mídia ignorada. Por favor, envie a mídia com o nome completo do aluno na legenda (Ex: Bernardo Henrique) para que eu possa localizar o Card.';
+            const warning = '⚠️ ALERTA: Mídia ignorada. Por favor, envie a mídia com o nome completo do aluno na legenda.';
             await client.sendMessage(MEU_WHATSAPP_PRIVADO, warning);
             console.warn(warning);
-            // Nenhum 'msg.reply()' no grupo
             return;
         }
 
@@ -171,12 +213,9 @@ client.on('message', async msg => {
                 
                 // Envia para o seu chat privado
                 await client.sendMessage(MEU_WHATSAPP_PRIVADO, privateMessage);
-                
-                // Nenhuma mensagem de resposta ou confirmação no grupo.
 
             } else {
                 console.log(`ℹ️ Mídia ignorada (Não é imagem/vídeo): ${mimeType}`);
-                // Nenhuma notificação no grupo
             }
 
         } catch (err) {
@@ -184,10 +223,44 @@ client.on('message', async msg => {
             
             // ✅ Notificação de Erro APENAS para o privado
             await client.sendMessage(MEU_WHATSAPP_PRIVADO, `❌ ALERTA DE ERRO: Ocorreu um erro ao processar e anexar a mídia do aluno **"${alunoNome}"**: ${err.message}`);
-            
-            // Nenhuma mensagem de erro no grupo.
         }
     }
 });
 
+// Inicializa o cliente do WhatsApp
 client.initialize();
+
+
+// ======================================================
+// 🌐 SERVIDOR EXPRESS (API E HEALTH CHECK)
+// ======================================================
+
+// Middleware para permitir acesso CORS do seu dashboard (workers.dev)
+app.use((req, res, next) => {
+    // 💡 IMPORTANTE: Adicione o domínio real do seu dashboard!
+    const allowedOrigins = ['http://localhost:8080', 'https://whatsapp-dashboard.abcgiga2015.workers.dev'];
+    const origin = req.headers.origin;
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
+
+// Rota 1: Health Check (para o Render não matar o processo)
+app.get('/', (req, res) => {
+  res.status(200).send('Bot Monitor API está rodando e pronto para Health Check.');
+});
+
+// Rota 2: API que o Dashboard HTML irá consultar para pegar o QR Code/Status
+app.get('/qrcode', (req, res) => {
+  // Retorna a Base64 ou a string de status ('READY', 'DISCONNECTED', etc.)
+  res.json({ qr: qrCodeBase64 });
+});
+
+// Inicia o servidor Express
+app.listen(port, () => {
+  console.log(`Web server listening on port ${port} and exposing /qrcode API.`);
+});
